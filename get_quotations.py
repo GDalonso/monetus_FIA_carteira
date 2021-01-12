@@ -32,14 +32,14 @@ def solve_api_key(keys):
         return key, keys
 
 
-def get_quote_symbol(symbol, api_key):
+def get_quote_symbol(symbol, api_key="X3T9RIKSB7XJAC26"):
     url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&interval=5min&apikey={api_key}"
     res = requests.get(url)
 
-    # Limite de 5 requests por minuto
     if res.json().get("Note"):
-        time_sleep(60)
-        return get_quote_symbol(symbol, api_key)
+        return {
+            symbol[:-4]: res.json().get("Global Quote", "APIKEYDEAD")
+        }
 
     # Remove o .SAO
     return {

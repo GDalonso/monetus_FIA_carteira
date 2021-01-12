@@ -5,8 +5,8 @@ from mocks import mock_MonetusFiaComposition
 def test_get_quotations():
     symbol = "IVVB11.SAO"
     res = get_quote_symbol(symbol=symbol)
-    assert symbol in res
-    assert res.get(symbol, "NotFound") != "NotFound"
+    assert symbol[:-4] in res
+    assert res.get(symbol[:-4], "NotFound") != "NotFound"
 
 
 def test_use_enum():

@@ -8,7 +8,7 @@ Enum with all the papers in the fund, used to get values
 
 
 class MonetusFiaComposition(Enum):
-    # Default values are the pct in the fund
+    # Values are the pct in the fund
     BIDI11 = 16.72
     NTCO3 = 16.44
     EZTC3 = 13.14
