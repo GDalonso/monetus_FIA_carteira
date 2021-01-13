@@ -1,5 +1,4 @@
 import requests
-from time import sleep as time_sleep
 
 # Consegue processar 20 requests por minuto
 # 5 requests por minuto/ 500 por dia por chave
@@ -32,7 +31,7 @@ def solve_api_key(keys):
         return key, keys
 
 
-def get_quote_symbol(symbol, api_key="X3T9RIKSB7XJAC26"):
+def get_variation_pct(symbol, api_key="X3T9RIKSB7XJAC26"):
     url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&interval=5min&apikey={api_key}"
     res = requests.get(url)
 
@@ -45,14 +44,31 @@ def get_quote_symbol(symbol, api_key="X3T9RIKSB7XJAC26"):
     return {
         symbol[:-4]: res.json()
         .get("Global Quote", "NotFound")
-        .get("05. price", "NotFound")
+        .get("10. change percent", "NotFound")
     }
 
 
-def get_current_quotations(enum):
+def get_current_variations(enum):
     current_values = {}
     keys = API_KEYS
     for paper in enum:
         api_key, keys = solve_api_key(keys)
-        current_values.update(get_quote_symbol(f"{paper.name}.SAO", api_key))
+        current_values.update(get_variation_pct(f"{paper.name}.SAO", api_key))
     return current_values
+
+def calculate_variation_average(all_variations):
+    """
+
+    :param all_variations: Dict {paper:variation}
+    :return:
+    """
+    f = 0.0
+    from monetus_FIA_composition import MonetusFiaComposition
+    for paper_pct in MonetusFiaComposition:
+        f = f + (paper_pct.value*parse_response_pct_to_float(all_variations.get(paper_pct.name, 0)))
+    return f/100
+
+def parse_response_pct_to_float(response_pct):
+    if not response_pct in ["APIKEYDEAD", "NotFound"]:
+        return float(response_pct[:-1])
+    return 0

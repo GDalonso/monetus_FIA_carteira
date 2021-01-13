@@ -1,6 +1,6 @@
 from enum import Enum
 
-from get_quotations import get_current_quotations
+from get_variation_pct import get_current_variations
 
 """
 Enum with all the papers in the fund, used to get values
@@ -27,4 +27,4 @@ class MonetusFiaComposition(Enum):
 
     @classmethod
     def get_current_quotations(self):
-        return get_current_quotations(enum=self)
+        return get_current_variations(enum=self)

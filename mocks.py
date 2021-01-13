@@ -10,6 +10,6 @@ class mock_MonetusFiaComposition(Enum):
 
     @classmethod
     def get_current_quotations(self):
-        from get_quotations import get_current_quotations
+        from get_variation_pct import get_current_variations
 
-        return get_current_quotations(enum=self)
+        return get_current_variations(enum=self)
