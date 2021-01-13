@@ -36,9 +36,7 @@ def get_variation_pct(symbol, api_key="X3T9RIKSB7XJAC26"):
     res = requests.get(url)
 
     if res.json().get("Note"):
-        return {
-            symbol[:-4]: res.json().get("Global Quote", "APIKEYDEAD")
-        }
+        return {symbol[:-4]: res.json().get("Global Quote", "APIKEYDEAD")}
 
     # Remove o .SAO
     return {
@@ -56,6 +54,7 @@ def get_current_variations(enum):
         current_values.update(get_variation_pct(f"{paper.name}.SAO", api_key))
     return current_values
 
+
 def calculate_variation_average(all_variations):
     """
 
@@ -64,9 +63,14 @@ def calculate_variation_average(all_variations):
     """
     f = 0.0
     from monetus_FIA_composition import MonetusFiaComposition
+
     for paper_pct in MonetusFiaComposition:
-        f = f + (paper_pct.value*parse_response_pct_to_float(all_variations.get(paper_pct.name, 0)))
-    return f/100
+        f = f + (
+            paper_pct.value
+            * parse_response_pct_to_float(all_variations.get(paper_pct.name, 0))
+        )
+    return f / 100
+
 
 def parse_response_pct_to_float(response_pct):
     if not response_pct in ["APIKEYDEAD", "NotFound"]:
